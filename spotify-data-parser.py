@@ -72,14 +72,23 @@ def get_track_data(data):
 
     for instance in data:
         track_name = instance["master_metadata_track_name"]
+        artist_name = instance["master_metadata_album_artist_name"]
         seconds = instance["ms_played"] / 1000
 
         if track_name != None:
             if track_name not in track_data:
-                track_data[track_name] = {"seconds_played": seconds, "times_played": 1}
+                track_data[track_name] = {"seconds_played": seconds,
+                                          "times_played": 1,
+                                          "Artist": instance["master_metadata_album_artist_name"]}
             elif track_name in track_data:
-                track_data[track_name]["seconds_played"] += seconds
-                track_data[track_name]["times_played"] += 1
+                if artist_name in track_data[track_name]:
+                    track_data[track_name]["seconds_played"] += seconds
+                    track_data[track_name]["times_played"] += 1
+                else:
+                    track_data[track_name+" "+artist_name] = {"seconds_played": seconds,
+                                              "times_played": 1,
+                                              "Artist": instance["master_metadata_album_artist_name"]}
+
             else:
                 print("Error occurred in getting artist data.")
                 return None
