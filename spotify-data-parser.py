@@ -8,7 +8,7 @@ from collections import OrderedDict
 #Insert here the path to the folder containing the json files provided by Spotify.
 raw_data_path = r"path_here"
 
-#Insert here the path to the folder you want the parsed data to be stored.
+#Insert here the path to the folder you want the parsed data to be stored in.
 analytics_path = r"path_here"
 
 #And specify whether you want to include podcast data in the plots (1 = yes, 0 = no).
@@ -329,9 +329,3 @@ def main():
 
 
 main()
-
-
-
-
-
-
