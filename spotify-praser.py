@@ -5,9 +5,13 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 from collections import OrderedDict
 
-#Insert here the path to the folder containing the json files provided by Spotify
-#And specify whether you want to include podcast data in the plots (1 = yes, 0 = no)
-path = r"path_here"
+#Insert here the path to the folder containing the json files provided by Spotify.
+raw_data_path = r"path_here"
+
+#Insert here the path to the folder you want the parsed data to be stored.
+analytics_path = r"path_here"
+
+#And specify whether you want to include podcast data in the plots (1 = yes, 0 = no).
 include_podcasts = 1
 
 
@@ -184,7 +188,7 @@ def create_artist_spreadsheet(artist_data):
     artist_header = ["Artist", "Time Listened (min)"]
 
 
-    with open("Artists.csv", "w", encoding="utf-16", newline='') as file:
+    with open(analytics_path+"\Artists.csv", "w", encoding="utf-16", newline='') as file:
         writer = csv.writer(file)
         writer.writerow(artist_header)
 
@@ -198,7 +202,7 @@ def create_artist_spreadsheet(artist_data):
     ws.append(artist_header)
     for i in artist_data:
         ws.append([i, artist_data[i]["minutes_played"]])
-    wb.save('Artists.xlsx')
+    wb.save(analytics_path+'\Artists.xlsx')
 
 
 #Creates and saves csv and xlsx files of the track data
@@ -206,7 +210,7 @@ def create_track_spreadsheet(track_data):
 
     track_header = ["Track", "Times Played", "Time Listened (min)"]
 
-    with open("Tracks.csv", "w", encoding="utf-16", newline='') as file:
+    with open(analytics_path+"\Tracks.csv", "w", encoding="utf-16", newline='') as file:
         writer = csv.writer(file)
         writer.writerow(track_header)
 
@@ -220,7 +224,7 @@ def create_track_spreadsheet(track_data):
     ws.append(track_header)
     for i in track_data:
         ws.append([i, track_data[i]["times_played"], track_data[i]["minutes_played"]])
-    wb.save('Tracks.xlsx')
+    wb.save(analytics_path+'\Tracks.xlsx')
 
 
 #Creates and saves a barplot with listen data for each day of the week.
@@ -253,7 +257,7 @@ def plot_weekday_data(weekday_data, include_podcasts=1):
     ax.set_ylabel('Hours')
     ax.set_title('Hours Listened by Day of the Week')
 
-    fig.savefig("Listen_Time_Week")
+    fig.savefig(analytics_path+"\Listen_Time_Week")
 
 
 #Creates and saves barplots with listen data for years, months and hours of the day.
@@ -289,18 +293,18 @@ def plot_timed_data(timed_data, include_podcasts=1):
 
         if data == timed_data[0]:
             ax.set_title('Hours Listened by Year')
-            fig.savefig("Listen_Time_Year")
+            fig.savefig(analytics_path+"\Listen_Time_Year")
         elif data == timed_data[1]:
             ax.set_title('Hours Listened by Month')
-            fig.savefig("Listen_Time_Month")
+            fig.savefig(analytics_path+"\Listen_Time_Month")
         elif data == timed_data[2]:
             ax.set_title('Hours Listened by Hour of the Day')
-            fig.savefig("Listen_Time_Hour")
+            fig.savefig(analytics_path+"\Listen_Time_Hour")
 
 
 def main():
 
-    data = gather_data(path)
+    data = gather_data(raw_data_path)
 
     artist_data = get_artist_data(data)
     track_data = get_track_data(data)
