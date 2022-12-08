@@ -85,7 +85,7 @@ def get_track_data(data):
                     track_data[track_name]["seconds_played"] += seconds
                     track_data[track_name]["times_played"] += 1
                 else:
-                    track_data[track_name+" "+artist_name] = {"seconds_played": seconds,
+                    track_data[track_name+", "+artist_name] = {"seconds_played": seconds,
                                               "times_played": 1,
                                               "Artist": instance["master_metadata_album_artist_name"]}
 
