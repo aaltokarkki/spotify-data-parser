@@ -14,6 +14,9 @@ analytics_path = r"path_here"
 #And specify whether you want to include podcast data in the plots (1 = yes, 0 = no).
 include_podcasts = 1
 
+#Give the number of rows you want in your top lists (0 for all).
+top_items = 100
+
 
 #Goes over all the json files in the given folder.
 #Returns them as a list of dictionaries one dictionary being one listen.
@@ -81,11 +84,11 @@ def get_track_data(data):
                                           "times_played": 1,
                                           "Artist": instance["master_metadata_album_artist_name"]}
             elif track_name in track_data:
-                if artist_name in track_data[track_name]:
+                if artist_name == track_data[track_name]["Artist"]:
                     track_data[track_name]["seconds_played"] += seconds
                     track_data[track_name]["times_played"] += 1
                 else:
-                    track_data[track_name+" "+artist_name] = {"seconds_played": seconds,
+                    track_data[track_name+" ({:s})".format(artist_name)] = {"seconds_played": seconds,
                                               "times_played": 1,
                                               "Artist": instance["master_metadata_album_artist_name"]}
 
@@ -192,39 +195,64 @@ def get_time_data(data):
 
 
 #Creates and saves csv and xlsx files of the artist data
-def create_artist_spreadsheet(artist_data):
+def create_artist_spreadsheet(artist_data, top_items):
 
     artist_header = ["Artist", "Time Listened (min)"]
 
+    if top_items == 0:
+        top_items = float("inf")
+
+    count = 0
 
     with open(analytics_path+"\Artists.csv", "w", encoding="utf-16", newline='') as file:
         writer = csv.writer(file)
         writer.writerow(artist_header)
 
         for i in artist_data:
-            writer.writerow([i, artist_data[i]["minutes_played"]])
+            if count < top_items and i:
+                writer.writerow([i, artist_data[i]["minutes_played"]])
+                count += 1
+            else:
+                break
+
     file.close()
 
+    count = 0
 
     wb = Workbook()
     ws = wb.active
     ws.append(artist_header)
     for i in artist_data:
-        ws.append([i, artist_data[i]["minutes_played"]])
+        if count < top_items and i:
+            ws.append([i, artist_data[i]["minutes_played"]])
+            count += 1
+        else:
+            break
     wb.save(analytics_path+'\Artists.xlsx')
 
 
 #Creates and saves csv and xlsx files of the track data
-def create_track_spreadsheet(track_data):
+def create_track_spreadsheet(track_data, top_items):
 
     track_header = ["Track", "Times Played", "Time Listened (min)"]
+
+    if top_items == 0:
+        top_items = float("inf")
+
+    count = 0
 
     with open(analytics_path+"\Tracks.csv", "w", encoding="utf-16", newline='') as file:
         writer = csv.writer(file)
         writer.writerow(track_header)
 
         for i in track_data:
-            writer.writerow([i, track_data[i]["times_played"], track_data[i]["minutes_played"]])
+            if count < top_items and i:
+                writer.writerow([i, track_data[i]["times_played"], track_data[i]["minutes_played"]])
+                count += 1
+            else:
+                break
+
+    count = 0
 
     file.close()
 
@@ -232,7 +260,11 @@ def create_track_spreadsheet(track_data):
     ws = wb.active
     ws.append(track_header)
     for i in track_data:
-        ws.append([i, track_data[i]["times_played"], track_data[i]["minutes_played"]])
+        if count < top_items and i:
+            ws.append([i, track_data[i]["times_played"], track_data[i]["minutes_played"]])
+            count += 1
+        else:
+            break
     wb.save(analytics_path+'\Tracks.xlsx')
 
 
@@ -318,8 +350,8 @@ def main():
     artist_data = get_artist_data(data)
     track_data = get_track_data(data)
 
-    create_track_spreadsheet(track_data)
-    create_artist_spreadsheet(artist_data)
+    create_track_spreadsheet(track_data, top_items)
+    create_artist_spreadsheet(artist_data, top_items)
 
     timed_data = get_time_data(data)
     weekday_data = get_weekday_data(data)
