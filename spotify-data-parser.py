@@ -74,6 +74,8 @@ def get_track_data(data):
     track_data = {}
 
     for instance in data:
+        if instance["ms_played"] < 30000:
+            continue
         track_name = instance["master_metadata_track_name"]
         artist_name = instance["master_metadata_album_artist_name"]
         seconds = instance["ms_played"] / 1000
@@ -116,6 +118,8 @@ def get_weekday_data(data):
     weekdays_data = {"Mon": {"Podcast": 0, "Music": 0}, "Tue": {"Podcast": 0, "Music": 0}, "Wed": {"Podcast": 0, "Music": 0}, "Thu": {"Podcast": 0, "Music": 0}, "Fri": {"Podcast": 0, "Music": 0}, "Sat": {"Podcast": 0, "Music": 0}, "Sun": {"Podcast": 0, "Music": 0}}
 
     for instance in data:
+        if instance["ms_played"] < 30000:
+            continue
         seconds = instance["ms_played"] / 1000
         day_data = instance["ts"].replace("Z", "").split("T")[0]
         year, month, day = day_data.split("-")
