@@ -5,10 +5,10 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 from collections import OrderedDict
 
-#Insert here the path to the folder containing the json files provided by Spotify. Use "/" as path separator.
+#Insert here the path to the folder containing the json files provided by Spotify. Use / as path separator.
 raw_data_path = r"path_here"
 
-#Insert here the path to the folder you want the parsed data to be stored in. Use "/" as path separator.
+#Insert here the path to the folder you want the parsed data to be stored in. Use / as path separator.
 analytics_path = r"path_here"
 
 #And specify whether you want to include podcast data in the plots (1 = yes, 0 = no).
