@@ -1,4 +1,4 @@
-import orjson
+import json
 import csv
 from openpyxl import Workbook
 from datetime import datetime
@@ -28,7 +28,7 @@ def gather_data(path):
     while True:
         try:
             with open(path+"/endsong_{:d}.json".format(i), "rb") as f:
-                data.extend(orjson.loads(f.read()))
+                data.extend(json.loads(f.read()))
             i += 1
         except:
             break
