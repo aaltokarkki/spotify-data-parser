@@ -4,4 +4,4 @@ I made this here code to parse the data provided by Spotify when you ask for you
 
 The code has virtually no error handling but it should work if you input paths properly.
 
-Packages required: orjson, openpyxl, datetime and matplotlib.
+Packages required: openpyxl, datetime and matplotlib.
