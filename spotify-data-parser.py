@@ -43,6 +43,8 @@ def get_artist_data(data):
     artist_data = {}
 
     for instance in data:
+        if instance["ms_played"] < 30000:
+            continue
         artist_name = instance["master_metadata_album_artist_name"]
         seconds = instance["ms_played"] / 1000
 
